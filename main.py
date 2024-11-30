@@ -38,16 +38,19 @@ if not credentials or not credentials.valid:
 
 youtube = build('youtube', 'v3', credentials=credentials)
 request = youtube.videos().list(
-    part        = ['snippet'],
-    myRating   = 'like'
+    part        = ['snippet', 'contentDetails', 'statistics'],
+    myRating    = 'like',
+    maxResults   = 50
 )
 
 response = request.execute()
 
+#pprint.pprint(response['items'])
+
 sb19_channelId  = 'UCm4v7afBTnJKRm4SlfHJzyg'
 darla_channelId = 'UCP50end1PCEhV4sWEygmQaQ'
 
-# Un-like the videos from the listed channels
+#Un-like the videos from the listed channels
 for liked_video in response['items']:
     if liked_video['snippet']['channelId'] == sb19_channelId or liked_video['snippet']['channelId'] == darla_channelId:
         print(f'Unliking: https://www.youtube.com/watch?v={liked_video['id']}')
